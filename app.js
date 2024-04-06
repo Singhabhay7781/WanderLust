@@ -22,6 +22,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 
+const wrapAsync = require("./utils/wrapAsync.js");
+const listingController = require("./controllers/listing.js");
+
 const dbUrl = process.env.ATLAS_DB;
 
 main()
@@ -84,6 +87,9 @@ app.use((req, res, next) => {
   res.locals.currUser = req.user;
   next();
 });
+
+//home route
+app.get("/", wrapAsync(listingController.index));
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id", reviewRouter);
